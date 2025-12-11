@@ -54,6 +54,8 @@ public class Controleur {
             }
             else{
                 ihm.afficherMessage("Classe inconnue.");
+                 classe = ihm.demanderCaracteres("Classe (Barbare / Sorcier / Archer / Assassin) :");
+                 c = classe.trim().toLowerCase(Locale.ROOT);
             }
         }
         donjon = new Donjon(themeChoisi);
