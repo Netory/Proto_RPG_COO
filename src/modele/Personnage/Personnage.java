@@ -2,118 +2,177 @@ package modele.Personnage;
 
 import modele.Items.Equipement;
 
-public abstract class Personnage{
+/**
+ * c'est le Pattern de Méthode Template 
+ */
+public abstract class Personnage {
 
-    private Integer PV;
-    private Integer Force;
-    private Integer Dexterite;
-    private Integer Constitution;
-    private Integer Intelligence;
-    private String Type_attaque;
+    public enum TypeAttaque {
+        PHYSIQUE, MAGIQUE
+    }
 
-    private Equipement Arme;
-    private Equipement Casque;
-    private Equipement Plastron;
-    private Equipement Jambiere;
-    private Equipement Bottes;
+    private String nom;
+    private int pvMax;
+    private int pv;
+    private int force;
+    private int dexterite;
+    private int constitution;
+    private int intelligence;
+    private TypeAttaque typeAttaque = TypeAttaque.PHYSIQUE;
 
+    private Equipement arme;
+    private Equipement casque;
+    private Equipement plastron;
+    private Equipement jambiere;
+    private Equipement bottes;
 
-    public  Integer attaque(){
-        if (getType_attaque().equalsIgnoreCase("physique")){
-            return getForce()+Arme.getForce()+ Casque.getForce()+ Plastron.getForce()+ Jambiere.getForce()+ Bottes.getForce();
+    public Personnage(String nom,
+                      int pv,
+                      int force,
+                      int dexterite,
+                      int constitution,
+                      int intelligence,
+                      TypeAttaque typeAttaque) {
+        this.nom = nom;
+        this.pvMax = pv;
+        this.pv = pv;
+        this.force = force;
+        this.dexterite = dexterite;
+        this.constitution = constitution;
+        this.intelligence = intelligence;
+        this.typeAttaque = typeAttaque;
+    }
+
+    public int calculAttaque() {
+        if (typeAttaque == TypeAttaque.MAGIQUE) {
+            return intelligence + bonusEquipIntelligence();
         }
-        else {
-            return getIntelligence()+ Arme.getIntelligence()+ Casque.getIntelligence()+ Plastron.getIntelligence()+ Jambiere.getIntelligence()+ Bottes.getIntelligence();
+        return force + bonusEquipForce();
+    }
+
+    public int calculReductionDefense() {
+        return Math.max(0, (dexterite + constitution) / 4);
+    }
+
+    public void equiper(Equipement equipement) {
+        if (equipement == null) return;
+        switch (equipement.getTypeEquipement()) {
+            case Arme:
+                this.arme = equipement;
+                break;
+            case Casque:
+                this.casque = equipement;
+                break;
+            case Plastron:
+                this.plastron = equipement;
+                break;
+            case Jambiere:
+                this.jambiere = equipement;
+                break;
+            case Bottes:
+                this.bottes = equipement;
+                break;
+            default:
+                break;
         }
-
     }
 
-
-    public Integer getIntelligence() {
-        return Intelligence;
+    public void recevoirDegats(int degatsBruts) {
+        int reduit = Math.max(1, degatsBruts);
+        this.pv = Math.max(0, this.pv - reduit);
     }
 
-    public Integer getConstitution() {
-        return Constitution;
+    public boolean estVivant() {
+        return this.pv > 0;
     }
 
-    public Integer getDexterite() {
-        return Dexterite;
+    private int bonusEquipForce() {
+        int bonus = 0;
+        if (arme != null) bonus += arme.getForce();
+        if (casque != null) bonus += casque.getForce();
+        if (plastron != null) bonus += plastron.getForce();
+        if (jambiere != null) bonus += jambiere.getForce();
+        if (bottes != null) bonus += bottes.getForce();
+        return bonus;
     }
 
-    public Integer getForce() {
-        return Force;
+    private int bonusEquipIntelligence() {
+        int bonus = 0;
+        if (arme != null) bonus += arme.getIntelligence();
+        if (casque != null) bonus += casque.getIntelligence();
+        if (plastron != null) bonus += plastron.getIntelligence();
+        if (jambiere != null) bonus += jambiere.getIntelligence();
+        if (bottes != null) bonus += bottes.getIntelligence();
+        return bonus;
     }
 
-    public Integer getPV() {
-        return PV;
+    public String getNom() {
+        return nom;
     }
 
-    public String getType_attaque(){
-        return Type_attaque;
+    public int getPv() {
+        return pv;
+    }
+
+    public int getPvMax() {
+        return pvMax;
+    }
+
+    public int getForce() {
+        return force;
+    }
+
+    public int getDexterite() {
+        return dexterite;
+    }
+
+    public int getConstitution() {
+        return constitution;
+    }
+
+    public int getIntelligence() {
+        return intelligence;
+    }
+
+    public TypeAttaque getTypeAttaque() {
+        return typeAttaque;
     }
 
     public Equipement getArme() {
-        return Arme;
+        return arme;
     }
 
     public Equipement getCasque() {
-        return Casque;
+        return casque;
     }
 
     public Equipement getPlastron() {
-        return Plastron;
+        return plastron;
     }
 
     public Equipement getJambiere() {
-        return Jambiere;
+        return jambiere;
     }
 
     public Equipement getBottes() {
-        return Bottes;
+        return bottes;
     }
 
-    public void setPV(Integer PV) {
-        this.PV = PV;
+    public int getBonusForceTotal() {
+        return bonusEquipForce();
     }
 
-    public void setForce(Integer force) {
-        Force = force;
+    public int getBonusIntelligenceTotal() {
+        return bonusEquipIntelligence();
     }
 
-    public void setDexterite(Integer dexterite) {
-        Dexterite = dexterite;
+    public void soigner(int quantite) {
+        pv = Math.min(pvMax, pv + Math.max(0, quantite));
     }
 
-    public void setConstitution(Integer constitution) {
-        Constitution = constitution;
-    }
-
-    public void setIntelligence(Integer intelligence) {
-        Intelligence = intelligence;
-    }
-
-    public void setType_attaque(String type_attaque) {
-        Type_attaque = type_attaque;
-    }
-
-    public void setArme(Equipement arme) {
-        Arme = arme;
-    }
-
-    public void setCasque(Equipement casque) {
-        Casque = casque;
-    }
-
-    public void setPlastron(Equipement Plastron) {
-        this.Plastron = Plastron;
-    }
-
-    public void setJambiere(Equipement jambiere) {
-        Jambiere = jambiere;
-    }
-
-    public void setBottes(Equipement bottes) {
-        Bottes = bottes;
+    @Override
+    public String toString() {
+        return nom + " [PV " + pv + "/" + pvMax + ", FOR " + force + ", DEX " + dexterite
+                + ", CON " + constitution + ", INT " + intelligence + ", " + typeAttaque + "]";
     }
 }

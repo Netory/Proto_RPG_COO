@@ -1,15 +1,15 @@
 package modele.Items;
 
-public class Equipement {
+public class Equipement extends Item {
 
-    private Integer PV;
-    private Integer Force;
-    private Integer Dexterite;
-    private Integer Constitution;
-    private Integer Intelligence;
-    private TypeEquipement typeEquipement;
+    private final int pv;
+    private final int force;
+    private final int dexterite;
+    private final int constitution;
+    private final int intelligence;
+    private final TypeEquipement typeEquipement;
 
-    public enum TypeEquipement{
+    public enum TypeEquipement {
         Arme,
         Casque,
         Plastron,
@@ -17,51 +17,44 @@ public class Equipement {
         Bottes
     }
 
-    public Integer getPV() {
-        return PV;
+    public Equipement(String nom,
+                      String description,
+                      TypeEquipement typeEquipement,
+                      int pv,
+                      int force,
+                      int dexterite,
+                      int constitution,
+                      int intelligence) {
+        super(nom, description);
+        this.typeEquipement = typeEquipement;
+        this.pv = pv;
+        this.force = force;
+        this.dexterite = dexterite;
+        this.constitution = constitution;
+        this.intelligence = intelligence;
     }
 
-    public Integer getForce() {
-        return Force;
+    public int getPV() {
+        return pv;
     }
 
-    public Integer getDexterite() {
-        return Dexterite;
+    public int getForce() {
+        return force;
     }
 
-    public Integer getConstitution() {
-        return Constitution;
+    public int getDexterite() {
+        return dexterite;
     }
 
-    public Integer getIntelligence() {
-        return Intelligence;
+    public int getConstitution() {
+        return constitution;
+    }
+
+    public int getIntelligence() {
+        return intelligence;
     }
 
     public TypeEquipement getTypeEquipement() {
         return typeEquipement;
-    }
-
-    public void setPV(Integer PV) {
-        this.PV = PV;
-    }
-
-    public void setForce(Integer force) {
-        Force = force;
-    }
-
-    public void setDexterite(Integer dexterite) {
-        Dexterite = dexterite;
-    }
-
-    public void setConstitution(Integer constitution) {
-        Constitution = constitution;
-    }
-
-    public void setIntelligence(Integer intelligence) {
-        Intelligence = intelligence;
-    }
-
-    public void setTypeEquipement(TypeEquipement typeEquipement) {
-        this.typeEquipement = typeEquipement;
     }
 }
