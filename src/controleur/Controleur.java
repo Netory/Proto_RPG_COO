@@ -52,8 +52,10 @@ public class Controleur {
                 joueur= new Assassin(nom);
                 break;
             }
+            else{
+                ihm.afficherMessage("Classe inconnue.");
+            }
         }
-            ihm.afficherMessage("Classe inconnue.");
         donjon = new Donjon(themeChoisi);
         donnerObjetsDepart(themeChoisi);
         ihm.afficherMessage("Bienvenue chère "+ classe + "! Vous êtes " + joueur);
