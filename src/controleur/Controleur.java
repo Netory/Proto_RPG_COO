@@ -173,7 +173,7 @@ public class Controleur {
             if (!ennemi.estVivant()) continue;
             int degats = calculDegats(ennemi, joueur);
             joueur.recevoirDegats(degats);
-            ihm.afficherMessage(ennemi.getNom() + " attaque (" + ennemi.calculAttaque() + " bruts) et vous inflige " + degats + " degats. PV: " + joueur.getPv());
+            ihm.afficherMessage(ennemi.getNom() + " attaque (" + ennemi.calculAttaque() + " bruts) et vous inflige " + (degats-joueur.calculReductionDefense()) + " degats. PV: " + joueur.getPv());
             if (!joueur.estVivant()) break;
         }
     }
