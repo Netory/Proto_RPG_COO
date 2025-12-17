@@ -100,8 +100,8 @@ public class Controleur {
     }
 
     private void gererSalle(Salle salle) {
-        ihm.afficherMessage("Ennemis et objets detectes.");
-        while (joueur.estVivant() && (resteEnnemis(salle) || !salle.getLoot().isEmpty())) {
+        ihm.afficherMessage("Ennemis et objets detectés.");
+        while (joueur.estVivant() && (resteEnnemis(salle) )){  //|| !salle.getLoot().isEmpty())) {
             afficherEnnemis(salle.getEnnemis());
             afficherLoot(salle.getLoot());
             afficherStatsJoueur();

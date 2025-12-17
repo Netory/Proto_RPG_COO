@@ -127,7 +127,7 @@ public class Donjon {
                 case 3:
                     return new Equipement("Plastron de maille", ", +15 constitution , -3 dexterite", Equipement.TypeEquipement.Plastron,0 , 0, -3, 15, 0);
                 case 4:
-                    return new Equipement("Jambière de paladin", "+10 constitution , +15 pv", Equipement.TypeEquipement.Jambiere, 15, 10, 0, 10, 0);
+                    return new Equipement("Jambière de paladin", "+10 constitution , +10 dexterite", Equipement.TypeEquipement.Jambiere, 0, 10, 10, 10, 0);
                 case 5:
                     return new Equipement("Grimoire ancien", "+20 intelligence", Equipement.TypeEquipement.Arme, 0, 0, 0, 0,20);
                 default:
