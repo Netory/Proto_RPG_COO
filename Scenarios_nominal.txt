@@ -1,0 +1,128 @@
+Choisir le thème – Scénario Nominal
+1. Le système invite le joueur à saisir un thème en écrivant Medieval ou Futuriste.
+2. Le joueur tape un nom valide.
+3. Le système valide la saisie.
+4. Le système charge la configuration du thème.
+5. Le système confirme le choix.
+
+
+Extensions :
+2a. Saisie invalide :
+- Message d'erreur.
+- Retour à l'étape 1.
+
+Choisir la classe de héros – Scénario Nominal
+1. Le système affiche les classes : Barbare, Sorcier, Archer, Assassin.
+2. Le joueur saisit le nom de la classe.
+3. Le système valide et enregistre la classe.
+
+Extensions :
+2a. Classe invalide :
+- Message d'erreur.
+- Retour à l'étape 1.
+
+Saisir un nom – Scénario Nominal
+1. Le système demande un nom.
+2. Le joueur saisit un texte.
+3. Vérification que non vide.
+4. Le nom est enregistré.
+
+Extensions :
+3a. Nom vide :
+- Message d'erreur.
+- Retour à l'étape 1.
+
+Créer personnage – Scénario Nominal
+1. Le système lance la procédure.
+2. UC : Choisir classe.
+3. UC : Saisir nom.
+4. Le système instancie le héros et ajoute 2 objets de départ.
+5. Confirmation et lancement du menu principal.
+
+Afficher l'inventaire – Scénario Nominal
+1. Le système affiche une liste simple des objets.
+2. Le joueur consulte et choisit quand revenir en arriere.
+3. Le système ferme l'affichage.
+
+Extensions :
+Inventaire vide :
+- Le système affiche "Inventaire vide".
+
+S'équiper d'un objet - Scénario Nominal :
+1.Le système demande au joueur de sélectionner un équipement dans la liste de son inventaire.
+2.Le joueur choisit l'objet qu'il souhaite porter.
+3.Le système équipe le nouvel objet.
+
+Consommer un objet – Scénario Nominal
+1. Le joueur sélectionne un consommable.
+2. L'effet est appliqué.
+3. L'objet est retiré de l'inventaire.
+4. Le système confirme.
+
+Entrer dans le donjon – Scénario Nominal
+1. Le système crée un donjon de 10 salles + salle finale.
+2. Le système génère des ennemis ou objets selon le thème.
+3. Le système place le joueur en salle 1.
+4. UC : Entrer dans une salle.
+
+Entrer dans une salle – Scénario Nominal
+1. Le système affiche le numéro de la salle actuelle.
+2. Le système présente la liste textuelle des ennemis et des objets au sol.
+3. Le système affiche les statistiques actuelles du joueur.
+4. Le système propose trois actions : Attaquer, Ramasser un objet ou Afficher l’inventaire.
+
+Ramasser un objet – Scénario Nominal
+1. Le système affiche la liste numérotée des objets disponibles au sol.
+2. Le joueur saisit l’indice de l’objet qu’il souhaite ramasser.
+3. Le système ajoute l’objet sélectionné à l’inventaire du joueur.
+4. Le système retire l’objet correspondant du sol.
+5. Le système confirme que l’objet a été ramassé.
+
+Extensions :
+2a.Indice invalide :
+- Le système indique que l’objet n’existe pas.
+- Retour à l’étape 1.
+
+Engager un combat – Scénario Nominal
+1. Le système affiche tous les ennemis présents ainsi que les objets au sol.
+2. Le système affiche les points de vie actuels du joueur.
+3. Le système propose les actions : Attaquer, Ramasser un objet ou Afficher l’inventaire.
+4. Le joueur choisit une action parmi celles proposées.
+
+Extensions :
+4a. Le joueur choisit d'Attaquer :
+- Le système exécute l’UC « Attaquer un ennemi ».
+- Le système fait riposter tous les ennemis encore vivants.
+- Le système met à jour les PV du joueur.
+
+4b. Le joueur choisit d'Utiliser un objet :
+- Le système exécute l’UC « Utiliser un objet ».
+
+4c. Le joueur choisit d'Afficher inventaire :
+- Le système affiche la liste simple des objets.
+- Retour au menu précédent.
+
+Attaquer un ennemi – Scénario Nominal
+1. Le système demande au joueur de choisir un ennemi en saisissant son indice.
+2. Le joueur sélectionne la cible souhaitée.
+3. Le système calcule les dégâts infligés en fonction des caractéristiques.
+4. Le système applique les dégâts à l’ennemi ciblé.
+5. Le système affiche les points de vie restants de l’ennemi.
+6. Le système marque l’ennemi comme vaincu si ses PV atteignent 0, mais ne le retire qu’à la fin du tour global.
+
+Extensions :
+2a.Indice invalide :
+- Le système affiche un message d’erreur.
+- Retour à l’étape 1.
+
+Utiliser un objet – Scénario Nominal
+1. Le système affiche la liste complète des objets du joueur.
+2. Le joueur saisit l’indice de l’objet qu’il souhaite utiliser.
+3. Le système applique l’effet si l’objet est un consommable.
+4. Le système équipe l’objet si c’est un équipement.
+5. Le système retire l’objet utilisé de l’inventaire.
+6. Le système affiche « Objet utilisé ».
+
+Extensions :
+1a. L'Inventaire est vide :
+- Le système affiche « Inventaire vide ».

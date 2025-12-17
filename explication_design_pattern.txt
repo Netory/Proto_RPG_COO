@@ -1,0 +1,43 @@
+1) Patron de méthode
+
+Le patron de méthode est présent dans la conception des personnages. 
+La classe Personnage est abstraite et définit un comportement commun pour tous 
+les personnages : calcul des dégâts, réception des dégâts, gestion des points 
+de vie, équipement, etc.
+
+Les sous-classes (Joueur, PNJ, Barbare, Sorcier, Archer, Assassin) ne modifient 
+que certaines parties du comportement, comme les statistiques ou des variations 
+du calcul selon les bonus temporaires. Le parent impose donc une structure 
+comportementale que les classes filles complètent.
+
+Cela correspond au pattern Patron de méthode vu dans le cours : définir une 
+méthode modèle dans une classe abstraite et laisser les sous-classes 
+personnaliser certains aspects sans modifier la structure globale.
+
+
+2) Factory
+
+Le projet utilise le pattern Factory Method dans la classe Donjon pour créer 
+dynamiquement des PNJ, des objets et le boss final.
+
+Les méthodes genererPNJ, genererItem, genererConsommable, genererEquipement 
+et genererBoss décident elles-mêmes quelle instance concrète créer selon le 
+thème du donjon ou un tirage aléatoire. Elles renvoient principalement des types 
+abstraits (PNJ, Item) sans exposer la logique d’instanciation au reste du programme.
+
+Cela correspond parfaitement au pattern Factory Method du cours : déléguer la 
+création d’objets à une méthode spécialisée afin de centraliser et encapsuler 
+la logique de construction.
+
+
+3) MVC
+
+Vue : vue.Ihm gère l’interface console (affichage des messages, lecture des entrées utilisateur)
+Contrôleur : controleur.Controleur gère le déroulement du jeu et appelle la vue pour interagir avec l’utilisateur.
+Modèle : contient les données du jeu et les règles qui les font évoluer.
+
+
+
+
+
+
