@@ -105,6 +105,25 @@ public abstract class Personnage {
         if (bottes != null) bonus += bottes.getIntelligence();
         return bonus;
     }
+private int bonusEquipDexterite() {
+        int bonus = 0;
+        if (arme != null) bonus += arme.getDexterite();
+        if (casque != null) bonus += casque.getDexterite();
+        if (plastron != null) bonus += plastron.getDexterite();
+        if (jambiere != null) bonus += jambiere.getDexterite();
+        if (bottes != null) bonus += bottes.getDexterite();
+        return bonus;
+    }
+private int bonusEquipConstitution() {
+        int bonus = 0;
+        if (arme != null) bonus += arme.getConstitution();
+        if (casque != null) bonus += casque.getConstitution();
+        if (plastron != null) bonus += plastron.getConstitution();
+        if (jambiere != null) bonus += jambiere.getConstitution();
+        if (bottes != null) bonus += bottes.getConstitution();
+        return bonus;
+    }
+
 
     public String getNom() {
         return nom;
@@ -165,6 +184,13 @@ public abstract class Personnage {
     public int getBonusIntelligenceTotal() {
         return bonusEquipIntelligence();
     }
+    public int getBonusDexteriteTotal() {
+        return bonusEquipDexterite();
+    }
+    public int getBonusConstitutionTotal() {
+        return bonusEquipConstitution();
+    }
+
 
     public void soigner(int quantite) {
         pv = Math.min(pvMax, pv + Math.max(0, quantite));

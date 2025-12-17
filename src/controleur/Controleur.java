@@ -215,8 +215,8 @@ public class Controleur {
         sb.append("Vos stats : ");
         sb.append("PV ").append(joueur.getPv()).append("/").append(joueur.getPvMax());
         sb.append(" | FOR ").append(joueur.getForce()).append(" (+").append(joueur.getBonusForceTotal()).append(" items)");
-        sb.append(" | DEX ").append(joueur.getDexterite());
-        sb.append(" | CON ").append(joueur.getConstitution());
+        sb.append(" | DEX ").append(joueur.getDexterite()).append(" (+").append(joueur.getBonusDexteriteTotal()).append(" items)");
+        sb.append(" | CON ").append(joueur.getConstitution()).append(" (+").append(joueur.getBonusForceTotal()).append(" items)");
         sb.append(" | INT ").append(joueur.getIntelligence()).append(" (+").append(joueur.getBonusIntelligenceTotal()).append(" items)");
         ihm.afficherMessage(sb.toString());
     }
