@@ -58,7 +58,7 @@ public class Donjon {
 
     private PNJ genererPNJ() {
         if (theme == Theme.MEDIEVAL) {
-            int tirage = random.nextInt(100);
+            int tirage = random.nextInt(101);
             if (tirage < 30) { // 30%
                 return new PNJ("Chevalier errant", 90, 15, 8, 12, 5, Personnage.TypeAttaque.PHYSIQUE, "Coup d'epee");
             } else if (tirage < 55) { // +25% = 55
@@ -71,7 +71,7 @@ public class Donjon {
                 return new PNJ("Gobelin", 56, 12, 12, 8, 6, Personnage.TypeAttaque.PHYSIQUE, "Coup de massue");
             }
         } else {
-            int tirage = random.nextInt(100);
+            int tirage = random.nextInt(101);
             if (tirage < 30) {
                 return new PNJ("Soldat cybernetique", 86, 14, 10, 12, 8, Personnage.TypeAttaque.PHYSIQUE, "Rafale");
             } else if (tirage < 55) {
@@ -115,7 +115,7 @@ public class Donjon {
     }
 
     private Item genererEquipement() {
-        int choix = random.nextInt(6);
+        int choix = random.nextInt(7);
         if (theme == Theme.MEDIEVAL) {
             switch (choix) {
                 case 0:
