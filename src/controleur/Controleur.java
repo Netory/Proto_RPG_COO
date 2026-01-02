@@ -37,27 +37,34 @@ public class Controleur {
         Donjon.Theme themeChoisi = demanderTheme();
         String nom = ihm.demanderCaracteres("Choisissez le nom de votre heros :");
         String classe = ihm.demanderCaracteres("Classe (Barbare / Sorcier / Archer / Assassin) :");
+        classe = classe.trim().toUpperCase(Locale.ROOT);
         while (true) {
-        String c = classe.trim().toLowerCase(Locale.ROOT);
-            if ("barbare".equals(c)) {
+        String c = classe;
+            if ("BARBARE".equals(c)) {
                 joueur= new Barbare(nom);
                 break;
-            } else if ("sorcier".equals(c)) {
+            } else if ("SORCIER".equals(c)) {
                 joueur= new Sorcier(nom);
                 break;
-            } else if ("archer".equals(c)) {
+            } else if ("ARCHER".equals(c)) {
                 joueur= new Archer(nom);
                 break;
-            } else if ("assassin".equals(c)) {
+            } else if ("ASSASSIN".equals(c)) {
                 joueur= new Assassin(nom);
                 break;
             }
             else{
                 ihm.afficherMessage("Classe inconnue.");
-                 classe = ihm.demanderCaracteres("Classe (Barbare / Sorcier / Archer / Assassin) :");
-                 c = classe.trim().toLowerCase(Locale.ROOT);
+                classe = ihm.demanderCaracteres("Classe (Barbare / Sorcier / Archer / Assassin) :");
+                classe = classe.trim().toUpperCase(Locale.ROOT);
+                 //pour que la boucle continue et que l'on conserve la variable classe
             }
         }
+        //pour l'affichage
+        classe=classe.trim().toLowerCase(Locale.ROOT);
+        classe = classe.substring(0, 1).toUpperCase() + classe.substring(1);
+
+
         donjon = new Donjon(themeChoisi);
         donnerObjetsDepart(themeChoisi);
         ihm.afficherMessage("Bienvenue chère "+ classe + "! Vous êtes " + joueur);
@@ -172,8 +179,8 @@ public class Controleur {
         for (PNJ ennemi : ennemis) {
             if (!ennemi.estVivant()) continue;
             int degats = calculDegats(ennemi, joueur);
-            joueur.recevoirDegats(degats);
-            ihm.afficherMessage(ennemi.getNom() + " attaque (" + ennemi.calculAttaque() + " bruts) et vous inflige " + (degats-joueur.calculReductionDefense()) + " degats. PV: " + joueur.getPv());
+            joueur.recevoirDegats(Math.max(1,degats));
+            ihm.afficherMessage(ennemi.getNom() + " attaque (" + ennemi.calculAttaque() + " bruts) et vous inflige " + (Math.max(1,degats-joueur.calculReductionDefense())) + " degats. PV: " + joueur.getPv());
             if (!joueur.estVivant()) break;
         }
     }
@@ -222,47 +229,106 @@ public class Controleur {
     }
 
     private void donnerObjetsDepart(Donjon.Theme theme) {
-        // Consommable commun diff selon le  thème
-        if (theme == Donjon.Theme.MEDIEVAL) {
-            joueur.ajouterObjet(new Consumable("Pomme", "+10 PV", Consumable.Effet.SOIN, 10, 0));
-        } else {
-            joueur.ajouterObjet(new Consumable("Injection med", "+10 PV", Consumable.Effet.SOIN, 10, 0));
-        }
-
-        // Arme de start adaptée à la classe
+        // Consommable commun diff selon le  thème et eqpuipement de start
         Equipement arme;
-        if (joueur instanceof Barbare) {
-            arme = new Equipement(theme == Donjon.Theme.MEDIEVAL ? "Hache de bois" : "Marteau energetique",
-                    "+6 force", Equipement.TypeEquipement.Arme, 0, 6, 0, 0, 0);
-        } else if (joueur instanceof Sorcier) {
-            arme = new Equipement(theme == Donjon.Theme.MEDIEVAL ? "Baton d'apprenti" : "Gant arcane",
-                    "+6 intelligence", Equipement.TypeEquipement.Arme, 0, 0, 0, 0, 6);
-        } else if (joueur instanceof Archer) {
-            arme = new Equipement(theme == Donjon.Theme.MEDIEVAL ? "Arc court" : "Arc plasma",
-                    "+6 dexterite", Equipement.TypeEquipement.Arme, 0, 0, 6, 0, 0);
-        } else if (joueur instanceof Assassin) {
-            arme = new Equipement(theme == Donjon.Theme.MEDIEVAL ? "Dague affutee" : "Lame monomoleculaire",
-                    "+4 force, +2 dexterite", Equipement.TypeEquipement.Arme, 0, 4, 2, 0, 0);
-        } else {
-            arme = new Equipement("Arme simple", "+5 force", Equipement.TypeEquipement.Arme, 0, 5, 0, 0, 0);
+        // Affiche la valeur brute de l'Enum (pas le nom du joueur)
+        //System.out.println("DEBUG VRAIE VALEUR ENUM : " + joueur.getClassePrimera());
+        //System.out.println("DEBUG CASE ATTENDU    : " + ClasseHeros.BARBARE); 
+
+
+
+        switch (theme) {
+            case MEDIEVAL:
+                joueur.ajouterObjet(new Consumable("Pomme", "+10 PV", Consumable.Effet.SOIN, 10, 0));
+                switch (joueur.getClassePrimera()) {
+                    case BARBARE:
+                        arme = new Equipement("Hache de bois", "+6 force", Equipement.TypeEquipement.Arme, 0, 6, 0, 0, 0);
+                        break;
+                    case SORCIER:
+                        arme = new Equipement("Baton d'apprenti", "+6 intelligence", Equipement.TypeEquipement.Arme, 0, 0, 0, 0, 6);
+                        break;
+                    case ARCHER:
+                        arme = new Equipement("Arc court", "+6 dexterite", Equipement.TypeEquipement.Arme, 0, 0, 6, 0, 0);
+                        break;
+                    case ASSASSIN:
+                        arme = new Equipement("Dague affutee", "+4 force, +2 dexterite", Equipement.TypeEquipement.Arme, 0, 4, 2, 0, 0);
+                        break;
+                    default:
+                        arme = new Equipement("Poings nus", "+0 force", Equipement.TypeEquipement.Arme, 0, 0, 0, 0, 0);
+                        break;
+                }
+                break;
+
+            case FUTURISTE:
+                joueur.ajouterObjet(new Consumable("Injection med", "+10 PV", Consumable.Effet.SOIN, 10, 0));
+                switch (joueur.getClassePrimera()) {
+                    case BARBARE:
+                        arme = new Equipement("Marteau energetique", "+6 force", Equipement.TypeEquipement.Arme, 0, 6, 0, 0, 0);
+                        break;
+                    case SORCIER:
+                        arme = new Equipement("Gant arcane", "+6 intelligence", Equipement.TypeEquipement.Arme, 0, 0, 0, 0, 6);
+                        break;
+                    case ARCHER:
+                        arme = new Equipement("Arc plasma", "+6 dexterite", Equipement.TypeEquipement.Arme, 0, 0, 6, 0, 0);
+                        break;
+                    case ASSASSIN:
+                        arme = new Equipement("Lame monomoleculaire", "+4 force, +2 dexterite", Equipement.TypeEquipement.Arme, 0, 4, 2, 0, 0);
+                        break;
+                    default:
+                        //System.out.println("il passe par là pas normal !!!!!!! c'est futuriste");
+                        arme = new Equipement("Poings nus", "+0 force", Equipement.TypeEquipement.Arme, 0, 0, 0, 0, 0);
+                        break;
+                }
+                break;
+
+            case HORREUR_FANTASTIQUE:
+                joueur.ajouterObjet(new Consumable("Potion suspecte", "+10 PV", Consumable.Effet.SOIN, 10, 0));
+                switch (joueur.getClassePrimera()) {    
+                    case BARBARE:
+                        //System.out.println("il passe par là bien !!!!! c'est le barbarre");
+                        arme = new Equipement("Machete sanglante", "+6 force", Equipement.TypeEquipement.Arme, 0, 6, 0, 0, 0);
+                        break;
+                    case SORCIER:
+                        arme = new Equipement("Grimoire tanné", "+6 intelligence", Equipement.TypeEquipement.Arme, 0, 0, 0, 0, 6);
+                        break;
+                    case ARCHER:
+                        arme = new Equipement("Shotgun rouillé", "+6 dexterite", Equipement.TypeEquipement.Arme, 0, 0, 6, 0, 0);
+                        break;
+                    case ASSASSIN:
+                        arme = new Equipement("Scalpel rouillé", "+4 force, +2 dexterite", Equipement.TypeEquipement.Arme, 0, 4, 2, 0, 0);
+                        break;
+                    default:
+                        //System.out.println("il passe par là pas normal !!!!!!! c'est horreur fantastique default");
+                        arme = new Equipement("Poings nus", "+0 force", Equipement.TypeEquipement.Arme, 0, 0, 0, 0, 0);
+                        break;
+                }
+                break;
+
+            default:
+               // System.out.println("il passe par là pas normal !!!!!!! c'est le default theme");
+                arme = new Equipement("Poings nus", "+0 force", Equipement.TypeEquipement.Arme, 0, 0, 0, 0, 0);//il passe pas par là
         }
         joueur.ajouterObjet(arme);
     }
 
     private Donjon.Theme demanderTheme() {
         while (true) {
-            String theme = ihm.demanderCaracteres("Choisissez un theme (Medieval/Futuriste) :");
-            if (theme == null) {
-                continue;
+            ihm.afficherMessage("\nChoisissez un thème de donjon :");
+            ihm.afficherMessage("1 - MEDIEVAL");
+            ihm.afficherMessage("2 - FUTURISTE");
+            ihm.afficherMessage("3 - HORREUR_FANTASTIQUE");
+            int choix = ihm.demanderEntier("Votre choix :");
+            switch (choix){
+                case 1:
+                    return Donjon.Theme.MEDIEVAL;
+                case 2:
+                    return Donjon.Theme.FUTURISTE;
+                case 3:
+                    return Donjon.Theme.HORREUR_FANTASTIQUE;
+                default:
+                    ihm.afficherMessage("Reponse invalide. Reessayez.");
+                    break;
             }
-            String t = theme.trim().toLowerCase(Locale.ROOT);
-            if (t.startsWith("m")) {
-                return Donjon.Theme.MEDIEVAL;
-            }
-            if (t.startsWith("f")) {
-                return Donjon.Theme.FUTURISTE;
-            }
-            ihm.afficherMessage("Reponse invalide.");
         }
     }
 }

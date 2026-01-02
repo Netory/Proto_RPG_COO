@@ -9,6 +9,10 @@ import java.util.List;
 
 public class Joueur extends Personnage {
 
+
+    private ClasseHeros classePrimera;
+    private ClasseHeros classeSegunda;
+
     private final List<Item> inventaire = new ArrayList<>();
     private int bonusForceTours;
     private int bonusForceValeur;
@@ -41,6 +45,21 @@ public class Joueur extends Personnage {
             degats = Math.max(1, degats - (degats * bonusResistancePourcent) / 100);
         }
         super.recevoirDegats(degats);
+    }
+    public void setClassePrimera(ClasseHeros classe) {
+        this.classePrimera = classe;
+    }
+
+    public ClasseHeros getClassePrimera() {
+        
+        System.out.println("il passe par là c'est bien " + classePrimera);
+        return classePrimera;
+    }
+    public void setClasseSegunda(ClasseHeros classe) {
+        this.classeSegunda = classe;
+    }
+    public ClasseHeros getClasseSegunda() {
+        return classeSegunda;
     }
 
     public void decrementerBuffs() {
