@@ -3,6 +3,7 @@ package modele.Personnage;
 import modele.Items.Consumable;
 import modele.Items.Equipement;
 import modele.Items.Item;
+import modele.Personnage.Passifs.SujetPassifs;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,10 +15,16 @@ public class Joueur extends Personnage {
     private ClasseHeros classeSegunda;
 
     private final List<Item> inventaire = new ArrayList<>();
+    private final SujetPassifs sujetPassifs = new SujetPassifs();
+
     private int bonusForceTours;
     private int bonusForceValeur;
+
     private int bonusResistanceTours;
     private int bonusResistancePourcent;
+
+    private int bonusConstitutionTours;
+    private int bonusConstitutionValeur;
 
     public Joueur(String nom,
                   int pv,
@@ -62,6 +69,11 @@ public class Joueur extends Personnage {
         return classeSegunda;
     }
 
+    public boolean possedeClasse(ClasseHeros c) {
+        if (c == null) return false;
+        return c == classePrimera || c == classeSegunda;
+    }
+
     public void decrementerBuffs() {
         if (bonusForceTours > 0) bonusForceTours--;
         if (bonusResistanceTours > 0) bonusResistanceTours--;
@@ -69,6 +81,11 @@ public class Joueur extends Personnage {
 
     public void appliquerSoin(int valeur) {
         soigner(valeur);
+    }
+
+    public void appliquerConstitution(int valeur, int tours) {
+        bonusConstitutionValeur = valeur;
+        bonusConstitutionTours = tours;
     }
 
     public void appliquerForce(int valeur, int tours) {
@@ -81,11 +98,19 @@ public class Joueur extends Personnage {
         bonusResistanceTours = tours;
     }
 
+    public void retirerBonusCombat() {
+        bonusForceValeur = 0;
+        bonusForceTours = 0;
+        bonusConstitutionValeur = 0;
+        bonusConstitutionTours = 0;
+    }
+
     public void ajouterObjet(Item item) {
         if (item != null) {
             inventaire.add(item);
         }
     }
+
 
     public List<Item> getInventaire() {
         return inventaire;
