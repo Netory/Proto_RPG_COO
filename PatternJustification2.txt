@@ -1,0 +1,33 @@
+1.Fabrique abstraite 
+
+Le projet utilise le pattern Fabrique abstraite pour gérer les thèmes du donjon  et produire des familles d’objets cohérentes.
+Une interface FabriqueTheme définit les méthodes de création (ennemis, boss, consommables, équipements). Chaque thème possède ensuite sa fabrique concrète (FabriqueMedievale, FabriqueFuturiste, FabriqueHorreurFantastique) qui instancie les bonnes variantes selon le thème.
+
+La classe Donjon ne crée jamais directement des ennemis/objets concrets : elle conserve une référence vers une FabriqueTheme et lui délègue la création. Ainsi, changer de thème revient à changer la fabrique utilisée, et tout le contenu généré suit automatiquement ce thème.
+
+2.Stratégie 
+
+Le pattern Stratégie est utilisé pour le choix du type d’attaque (physique / magique) de manière interchangeable pendant le jeu.
+
+Une interface AttackStrategy définit l’algorithme d’attaque. Deux stratégies concrètes existent (MeleeAttack et MagicAttack). Le Joueur possède une collection de stratégies disponibles et une stratégie courante, et le Controleur propose à l’utilisateur de choisir la stratégie à utiliser pendant le tour.
+
+Le combat délègue alors le calcul/type d’attaque à l’objet stratégie choisi, plutôt que de coder des if/else partout dans la logique du combat. On peut donc ajouter facilement de nouveaux styles d’attaque en créant une nouvelle classe stratégie.
+
+
+3. Observateur 
+
+Le pattern Observateur est utilisé pour implémenter les compétences passives sous forme de réactions à des événements (début de tour, attaque subie, attaque effectuée, objet utilisé, arme changée...).
+
+Le joueur possède un sujet (SujetPassifs) qui gère une liste d’observateurs. Chaque passif (Regeneration, PeauDure, BouclierMagique, ContreAttaque, etc.) implémente mettreAJour(Evenement) et réagit uniquement aux événements qui le concernent.
+
+Lorsqu’une action importante se produit, le contrôleur déclenche un événement via Joueur.declencher(...). Le sujet notifie alors tous les passifs, qui peuvent modifier la valeur de l’événement et ajouter des messages. Le contrôleur affiche ensuite ces messages.
+
+4.MVC
+
+Le projet suit une séparation de type MVC pour organiser le code.
+
+vue.Ihm gère l’interface console (afficher les messages, demander des entrées clavier).
+
+Contrôleur gère le déroulement du jeu (menus, exploration, combat, inventaire) et s'occupe les appels.
+
+Modèle contient les données et règles du jeu (donjon, salles, personnages, objets, passifs, stratégies).
