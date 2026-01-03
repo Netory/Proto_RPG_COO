@@ -7,7 +7,6 @@ import modele.Personnage.Passifs.*;
 import modele.Personnage.Strategies.AttackStrategy;
 import modele.Personnage.Strategies.MagicAttack;
 import modele.Personnage.Strategies.MeleeAttack;
-import modele.Personnage.Strategies.WeaponAttack;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -107,19 +106,6 @@ public class Joueur extends Personnage {
                 break;
             default:
                 break;
-        }
-    }
-
-    public void initialiserStrategieArme() {
-        ajouterStrategieUnique(new WeaponAttack());
-    }
-
-    private void choisirStrategieWeapon() {
-        for (AttackStrategy s : strategies) {
-            if (s instanceof WeaponAttack) {
-                setStrategieCourante(s);
-                return;
-            }
         }
     }
 
@@ -247,8 +233,6 @@ public class Joueur extends Personnage {
         if (item instanceof Equipement) {
             Equipement equipement = (Equipement) item;
             equiper(equipement);
-            initialiserStrategieArme();
-            choisirStrategieWeapon();
             inventaire.remove(index);
             return true;
         }
