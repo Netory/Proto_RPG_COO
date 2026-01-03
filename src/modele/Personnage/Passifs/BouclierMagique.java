@@ -6,6 +6,7 @@ public class BouclierMagique implements Observateur {
 
     private boolean disponible = true;
     private boolean actifCeTour = false;
+    private String description = "[Passif ] Bouclier Magique : Premier attaque subie annulée (1 fois par combat)";
 
     @Override
     public void mettreAJour(Evenement e) {
@@ -14,6 +15,7 @@ public class BouclierMagique implements Observateur {
         if (e.getType() == TypeEvenement.DEBUT_COMBAT) {
             disponible = true;
             actifCeTour = false;
+            e.ajouterMessage("[Passif] Bouclier Magique pret pour ce combat");
             return;
         }
 
@@ -26,6 +28,11 @@ public class BouclierMagique implements Observateur {
             e.setValeur(0);
             actifCeTour = true;
             disponible = false;
+            e.ajouterMessage("[Passif] Bouclier Magique annule l'attaque");
         }
+    }
+    @Override
+    public String getDescription() {
+        return description;
     }
 }

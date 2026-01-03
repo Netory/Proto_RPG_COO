@@ -36,7 +36,7 @@ public class FabriqueHorreurFantastique implements FabriqueTheme {
         int choix = random.nextInt(3);
         switch (choix) {
             case 0:
-                return new Consumable("Sang ancien", "Rend 35 PV", Consumable.Effet.SOIN, 35, 0);
+                return new Consumable("Sang ancien", "Rend 30 PV", Consumable.Effet.SOIN, 30, 0);
             case 1:
                 return new Consumable("Essence de terreur", "+6 force / 3 tours", Consumable.Effet.FORCE, 6, 3);
             default:

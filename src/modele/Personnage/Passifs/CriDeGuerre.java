@@ -4,13 +4,12 @@ import modele.Personnage.ClasseHeros;
 
 public class CriDeGuerre implements Observateur {
 
-    private final int forcePourcentage;
-    private final int constitutionPourcentage;
+    private final int force=2;
+    private final int constitution=2;
     private boolean actif = false;
+    private String description = "[Passif] Cri de Guerre : +" + force + " FOR, +" + constitution + " CON (combat)";
 
-    public CriDeGuerre(int forcePourcentage, int constitutionPourcentage) {
-        this.forcePourcentage = Math.max(2, Math.min(3, forcePourcentage));
-        this.constitutionPourcentage = Math.max(5, Math.min(10, constitutionPourcentage));
+    public CriDeGuerre() {
     }
 
     @Override
@@ -18,18 +17,23 @@ public class CriDeGuerre implements Observateur {
         if (!e.getJoueur().possedeClasse(ClasseHeros.BARBARE)) return;
 
         if (e.getType() == TypeEvenement.DEBUT_COMBAT && !actif) {
-            int bonusForce = Math.max(1, (e.getJoueur().getForce() * forcePourcentage) / 100);
-            int bonusConstitution = Math.max(1, (e.getJoueur().getConstitution() * constitutionPourcentage) / 100);
+            
+            e.getJoueur().appliquerForce(force, 9999);
+            e.getJoueur().appliquerConstitution(constitution, 9999);
 
-            e.getJoueur().appliquerForce(bonusForce, 9999);
-            e.getJoueur().appliquerConstitution(bonusConstitution, 9999);
             actif = true;
+            e.ajouterMessage("[Passif] Cri de Guerre : +" + force + " FOR et +" + constitution + " CON pour ce combat");
             return;
         }
 
         if (e.getType() == TypeEvenement.FIN_COMBAT) {
             e.getJoueur().retirerBonusCombat();
             actif = false;
+            e.ajouterMessage("[Passif] Cri de Guerre se dissipe en fin de combat");
         }
+    }
+    @Override
+    public String getDescription() {
+        return description;
     }
 }

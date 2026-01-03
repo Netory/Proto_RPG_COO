@@ -4,10 +4,10 @@ import modele.Personnage.ClasseHeros;
 
 public class Adrenaline implements Observateur {
 
-    private final int pourcentage;
+    private final int buff =2;
+    private String description = "[Passif] Adrenaline : Force +" + buff + " (1 tour)";
 
-    public Adrenaline(int pourcentage) {
-        this.pourcentage = Math.max(10, Math.min(20, pourcentage));
+    public Adrenaline() {
     }
 
     @Override
@@ -19,8 +19,12 @@ public class Adrenaline implements Observateur {
             return;
         }
 
-        int base = e.getJoueur().getForce();
-        int bonus = Math.max(1, (base * pourcentage) / 100);
-        e.getJoueur().appliquerForce(bonus, 1);
+        e.getJoueur().appliquerForce(buff, 1);
+        e.ajouterMessage("[Passif] Adrenaline : +" + buff + " FOR pour 1 tour");
+        
+    }
+    @Override
+    public String getDescription() {
+        return description;
     }
 }

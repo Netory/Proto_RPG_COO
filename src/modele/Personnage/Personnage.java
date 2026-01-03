@@ -59,7 +59,13 @@ public abstract class Personnage {
         switch (equipement.getTypeEquipement()) {
             case Arme:
                 this.arme = equipement;
+                if (equipement.getIntelligence() > 0) {
+                    setTypeAttaque(TypeAttaque.MAGIQUE);
+                } else {
+                    setTypeAttaque(TypeAttaque.PHYSIQUE);
+                }
                 break;
+
             case Casque:
                 this.casque = equipement;
                 break;
@@ -195,6 +201,13 @@ private int bonusEquipConstitution() {
     public void soigner(int quantite) {
         pv = Math.min(pvMax, pv + Math.max(0, quantite));
     }
+
+    public void setTypeAttaque(TypeAttaque typeAttaque) {
+        if (typeAttaque != null) {
+            this.typeAttaque = typeAttaque;
+        }
+    }
+
 
     @Override
     public String toString() {

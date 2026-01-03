@@ -3,6 +3,9 @@ package modele.Personnage.Passifs;
 import modele.Items.Item;
 import modele.Personnage.Joueur;
 import modele.Personnage.Personnage;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class Evenement {
 
@@ -12,6 +15,7 @@ public class Evenement {
     private final Personnage cible;
     private int valeur;
     private final Item item;
+    private final List<String> messages = new ArrayList<>();
 
     public Evenement(TypeEvenement type,
                      Joueur joueur,
@@ -33,8 +37,16 @@ public class Evenement {
     public Personnage getCible() { return cible; }
     public int getValeur() { return valeur; }
     public Item getItem() { return item; }
+    public List<String> getMessages() { return Collections.unmodifiableList(messages); }
 
     public void setValeur(int valeur) {
         this.valeur = Math.max(0, valeur);
     }
+
+    public void ajouterMessage(String message) {
+        if (message != null && !message.isEmpty()) {
+            messages.add(message);
+        }
+    }
+
 }

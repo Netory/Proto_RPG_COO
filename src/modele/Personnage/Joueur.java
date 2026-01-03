@@ -3,19 +3,29 @@ package modele.Personnage;
 import modele.Items.Consumable;
 import modele.Items.Equipement;
 import modele.Items.Item;
-import modele.Personnage.Passifs.SujetPassifs;
+import modele.Personnage.Passifs.*;
+import modele.Personnage.Strategies.AttackStrategy;
+import modele.Personnage.Strategies.MagicAttack;
+import modele.Personnage.Strategies.MeleeAttack;
+import modele.Personnage.Strategies.WeaponAttack;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class Joueur extends Personnage {
-
 
     private ClasseHeros classePrimera;
     private ClasseHeros classeSegunda;
 
     private final List<Item> inventaire = new ArrayList<>();
     private final SujetPassifs sujetPassifs = new SujetPassifs();
+    private final Set<Class<?>> passifsDejaAjoutes = new HashSet<>();
+
+    private final List<AttackStrategy> strategies = new ArrayList<>();
+    private AttackStrategy strategieCourante;
 
     private int bonusForceTours;
     private int bonusForceValeur;
@@ -36,6 +46,84 @@ public class Joueur extends Personnage {
         super(nom, pv, force, dexterite, constitution, intelligence, typeAttaque);
     }
 
+    public Evenement declencher(TypeEvenement type, Personnage source, Personnage cible, int valeur, Item item) {
+        Evenement e = new Evenement(type, this, source, cible, valeur, item);
+        sujetPassifs.notifierObservateurs(e);
+        return e;
+    }
+
+    //STRATEGIES
+    public List<AttackStrategy> getStrategies() {
+        return Collections.unmodifiableList(strategies);
+    }
+
+    public AttackStrategy getStrategieCourante() {
+        return strategieCourante;
+    }
+
+    public void setStrategieCourante(AttackStrategy strategieCourante) {
+        if (strategieCourante == null) return;
+        ajouterStrategieUnique(strategieCourante);
+        AttackStrategy trouvee = trouverStrategieParClasse(strategieCourante.getClass());
+        if (trouvee == null) return;
+        this.strategieCourante = trouvee;
+        // met a jour le type d'attaque du joueur pour le reste des calculs
+        setTypeAttaque(trouvee.getTypeAttaque(this));
+    }
+
+    private void ajouterStrategieUnique(AttackStrategy strat) {
+        if (strat == null) return;
+        for (AttackStrategy s : strategies) {
+            if (s.getClass() == strat.getClass()) {
+                return;
+            }
+        }
+        strategies.add(strat);
+        if (strategieCourante == null) {
+            setStrategieCourante(strat);
+        }
+    }
+
+    private AttackStrategy trouverStrategieParClasse(Class<? extends AttackStrategy> clazz) {
+        if (clazz == null) return null;
+        for (AttackStrategy s : strategies) {
+            if (s.getClass() == clazz) {
+                return s;
+            }
+        }
+        return null;
+    }
+
+    private void initialiserStrategiePourClasse(ClasseHeros classe) {
+        if (classe == null) return;
+        switch (classe) {
+            case BARBARE:
+            case ARCHER:
+            case ASSASSIN:
+                ajouterStrategieUnique(new MeleeAttack());
+                break;
+            case SORCIER:
+                ajouterStrategieUnique(new MagicAttack());
+                break;
+            default:
+                break;
+        }
+    }
+
+    public void initialiserStrategieArme() {
+        ajouterStrategieUnique(new WeaponAttack());
+    }
+
+    private void choisirStrategieWeapon() {
+        for (AttackStrategy s : strategies) {
+            if (s instanceof WeaponAttack) {
+                setStrategieCourante(s);
+                return;
+            }
+        }
+    }
+
+    // COMBAT 
     @Override
     public int calculAttaque() {
         int base = super.calculAttaque();
@@ -53,18 +141,24 @@ public class Joueur extends Personnage {
         }
         super.recevoirDegats(degats);
     }
+
+    //CLASSES
     public void setClassePrimera(ClasseHeros classe) {
         this.classePrimera = classe;
+        initialiserPassifsPourClasse(classe);
+        initialiserStrategiePourClasse(classe);
     }
 
     public ClasseHeros getClassePrimera() {
-        
-        System.out.println("il passe par là c'est bien " + classePrimera);
         return classePrimera;
     }
+
     public void setClasseSegunda(ClasseHeros classe) {
         this.classeSegunda = classe;
+        initialiserPassifsPourClasse(classe);
+        initialiserStrategiePourClasse(classe);
     }
+
     public ClasseHeros getClasseSegunda() {
         return classeSegunda;
     }
@@ -74,9 +168,11 @@ public class Joueur extends Personnage {
         return c == classePrimera || c == classeSegunda;
     }
 
+    //BUFFS
     public void decrementerBuffs() {
         if (bonusForceTours > 0) bonusForceTours--;
         if (bonusResistanceTours > 0) bonusResistanceTours--;
+        if (bonusConstitutionTours > 0) bonusConstitutionTours--;
     }
 
     public void appliquerSoin(int valeur) {
@@ -105,12 +201,12 @@ public class Joueur extends Personnage {
         bonusConstitutionTours = 0;
     }
 
+    //INVENTAIRE
     public void ajouterObjet(Item item) {
         if (item != null) {
             inventaire.add(item);
         }
     }
-
 
     public List<Item> getInventaire() {
         return inventaire;
@@ -151,9 +247,47 @@ public class Joueur extends Personnage {
         if (item instanceof Equipement) {
             Equipement equipement = (Equipement) item;
             equiper(equipement);
+            initialiserStrategieArme();
+            choisirStrategieWeapon();
             inventaire.remove(index);
             return true;
         }
         return false;
+    }
+
+    //PASSIFS
+    private void ajouterPassifUnique(Observateur passif) {
+        if (passif == null) return;
+        if (passifsDejaAjoutes.add(passif.getClass())) {
+            sujetPassifs.attacher(passif);
+        }
+    }
+
+    public void initialiserPassifsPourClasse(ClasseHeros classe) {
+        if (classe == null) return;
+
+        // all classes
+        ajouterPassifUnique(new Regeneration());
+
+        switch (classe) {
+            case BARBARE:
+                ajouterPassifUnique(new PeauDure());
+                ajouterPassifUnique(new ContreAttaque());
+                ajouterPassifUnique(new CriDeGuerre());
+                break;
+            case SORCIER:
+                ajouterPassifUnique(new BouclierMagique());
+                break;
+            case ARCHER:
+                ajouterPassifUnique(new PeauDure());
+                ajouterPassifUnique(new Adrenaline());
+                break;
+            case ASSASSIN:
+                ajouterPassifUnique(new ContreAttaque());
+                ajouterPassifUnique(new Adrenaline());
+                break;
+            default:
+                break;
+        }
     }
 }

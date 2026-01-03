@@ -19,6 +19,15 @@ public class PeauDure implements Observateur {
             return;
         }
 
-        e.setValeur(reduction);
+        int valeurInitiale = e.getValeur();
+        e.setValeur(e.getValeur() - reduction);
+        if (e.getValeur() != valeurInitiale) {
+            e.ajouterMessage("[Passif] Peau Dure : -" + reduction + " degats subis");
+        }
+
+    }
+    @Override
+    public String getDescription() {
+        return "[Passif] Peau Dure : -"+ 3 +" degats subis";
     }
 }

@@ -34,7 +34,7 @@ public class FabriqueFuturiste implements FabriqueTheme {
         int choix = random.nextInt(3);
         switch (choix) {
             case 0:
-                return new Consumable("Nanites reparatrices", "Rend 25 PV", Consumable.Effet.SOIN, 25, 0);
+                return new Consumable("Nanites reparatrices", "Rend 30 PV", Consumable.Effet.SOIN, 30, 0);
             case 1:
                 return new Consumable("Booster musculaire", "+5 force / 3 tours", Consumable.Effet.FORCE, 5, 3);
             default:
