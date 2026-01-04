@@ -15,4 +15,6 @@ public interface FabriqueTheme {
     Item creerEquipement(Random random);
 
     Item creerConsommable(Random random);
+
+    Item creerObjetLegendaire();
 }

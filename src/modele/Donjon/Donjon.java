@@ -3,7 +3,6 @@ package modele.Donjon;
 import modele.Donjon.fabrique.ChoixTheme;
 import modele.Donjon.fabrique.FabriqueTheme;
 import modele.Items.Item;
-import modele.Items.ObjetLegendaire;
 import modele.Personnage.PNJ;
 
 import java.util.ArrayList;
@@ -95,12 +94,11 @@ public class Donjon {
         return fabrique.creerEquipement(random);
     }
 
-    /**
-     * L'arme/objet legendaire unique du donjon.
-     * (Dans ton code actuel, c'est un ObjetLegendaire ; le controleur peut lui donner une 2e classe au ramassage.)
-     */
+   
     private Item creerArmeLegendaire() {
-        switch (theme) {
+
+        return fabrique.creerObjetLegendaire();
+       /* switch (theme) {
             case MEDIEVAL:
                 return new ObjetLegendaire(
                         "Epee du Serment Brise",
@@ -124,7 +122,7 @@ public class Donjon {
                         "Arme legendaire",
                         "Une arme dont tu ignores encore les effets.",
                         null
-                );
-        }
+                );*/
     }
 }
+

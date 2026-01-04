@@ -3,6 +3,7 @@ package modele.Donjon.fabrique;
 import modele.Items.Consumable;
 import modele.Items.Equipement;
 import modele.Items.Item;
+import modele.Items.ObjetLegendaire;
 import modele.Personnage.PNJ;
 import modele.Personnage.Personnage;
 
@@ -70,5 +71,13 @@ public class FabriqueHorreurFantastique implements FabriqueTheme {
                 return new Equipement("Talisman profane", "+10 intelligence , +5 constitution",
                         Equipement.TypeEquipement.Casque, 0, 0, 0, 5, 10);
         }
+    }
+    @Override
+    public Item creerObjetLegendaire() {
+        return new ObjetLegendaire(
+                        "Faux des Murmures",
+                        "Elle pulse dans ta main... et quelque chose en toi change. Une nouvelle voie s'eveille.",
+                        null
+                    );
     }
 }

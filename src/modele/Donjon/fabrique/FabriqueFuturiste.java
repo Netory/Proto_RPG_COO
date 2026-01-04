@@ -3,6 +3,7 @@ package modele.Donjon.fabrique;
 import modele.Items.Consumable;
 import modele.Items.Equipement;
 import modele.Items.Item;
+import modele.Items.ObjetLegendaire;
 import modele.Personnage.PNJ;
 import modele.Personnage.Personnage;
 
@@ -69,4 +70,13 @@ public class FabriqueFuturiste implements FabriqueTheme {
                         Equipement.TypeEquipement.Bottes, 0, 0, 5, 0, 0);
         }
     }
+
+    @Override
+    public Item creerObjetLegendaire() {
+        return new ObjetLegendaire(
+                        "Lame Photon Prototype",
+                        "Une arme experimentale reajuste tes capacites et debloque un nouveau style de combat.",
+                        null
+                );
+        }
 }
